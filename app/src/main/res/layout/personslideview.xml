@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="0dp">
+
+    <RelativeLayout
+        android:id="@+id/outerRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/shadow1"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:elevation="10dp" />
+
+        <RelativeLayout
+            android:id="@+id/innerRL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/shadow1"
+            android:elevation="15dp">
+
+            <ImageView
+                android:id="@+id/daimajia_slider_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:elevation="15dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <ImageButton
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="25dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_add_snap"
+        android:text="Button"
+        android:tint="@android:color/white" />
+
+
+    <RelativeLayout
+        android:id="@+id/heart_shadow"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignEnd="@+id/button3"
+        android:alpha="0.9"
+        android:background="@drawable/shadow1"
+        android:elevation="29dp">
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/button3"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/outerRL"
+        android:layout_alignEnd="@+id/outerRL"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="true"
+
+        android:backgroundTint="@color/colorHeartRed"
+        android:elevation="30dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_core_heart"
+        android:tint="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/load_more_check"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_above="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:background="#000000"
+        android:visibility="gone" />
+
+</RelativeLayout>

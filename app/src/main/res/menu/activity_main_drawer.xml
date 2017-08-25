@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_your_suggestions"
+            android:title="Your Suggestions" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_whatshot_black"
+            android:title="New &amp; Hot" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_person_black"
+            android:title="Your Profile" />
+    </group>
+
+    <item android:title="Diamonds">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Get More Diamonds" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HelloFriend</string>
+    <string name="title_activity_your__suggestions">Your_Suggestions</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_new__and__hot">New_And_Hot</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="likes">LIKES</string>
+</resources>
