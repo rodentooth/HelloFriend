@@ -1,39 +1,34 @@
 package com.frozensparks.hellofriend.your_suggestions;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Space;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+
+import com.frozensparks.hellofriend.NewAndHot.New_People_fragment;
 import com.frozensparks.hellofriend.R;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,15 +47,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Your_Suggestions.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Your_Suggestions#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Your_Suggestions extends Fragment {
 
     private static Context context;
@@ -69,117 +55,58 @@ public class Your_Suggestions extends Fragment {
     View view;
     RecyclerView mRecyclerView;
     static int load_more =0;
-    private List<FeedItem> feedsList;
-    private RecycleViewAdapter_your_suggestions adapter;
+    private static List<FeedItem> feedsList;
     LinearLayoutManager llm;
 
+    //private ViewPager mPager;
+    //private MyPagerAdapter mAdapter;
+
+    static final int ITEMS = 10;
+    MyAdapter mAdapter;
+    ViewPager mPager;
 
 
 
 
-    SliderLayout sliderShow;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
 
     public Your_Suggestions() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Your_Suggestions.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Your_Suggestions newInstance(String param1, String param2) {
-        Your_Suggestions fragment = new Your_Suggestions();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-        AppBarLayout.LayoutParams params =
-                (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);    }
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view= inflater.inflate(R.layout.fragment_your__suggestions, container, false);
+
 /*
-         sliderShow = (SliderLayout) view.findViewById(R.id.slider);
-
-        sliderShow.setCustomIndicator((PagerIndicator) view.findViewById(R.id.custom_indicator));
-
-        sliderShow.setPagerTransformer(false,new SlideTransformer());
-        sliderShow.stopAutoCycle();
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
+        AppBarLayout.LayoutParams params =
+                (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
 */
-        mRecyclerView = view.findViewById(R.id.recyclerView_your_suggestions);
-        llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(llm);
 
-
-        final Handler han=new Handler();
-        han.postDelayed(new Runnable() {
-
-
-            @Override
-            public void run() {
-                int firstItemPos=llm.findFirstVisibleItemPosition();
-                View firstItemView=llm.findViewByPosition(firstItemPos);
-
-                if(firstItemView !=null) {
-                    setAnimation(firstItemView, (int) Math.abs(firstItemView.getY()));
-
-                    final Toast toast = Toast.makeText(context, Float.toString(Math.abs(firstItemView.getY())), Toast.LENGTH_SHORT);
-                   // toast.show();
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            toast.cancel();
-                        }
-                    }, 10);
-                }
-                han.postDelayed(this, 10);
-            }
-        }, 10);
-
-
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(mRecyclerView);
-
-
-        final AsyncTask_Your_suggestions get_user = new AsyncTask_Your_suggestions(getContext());
-
+        view= inflater.inflate(R.layout.fragment_your__suggestions, container, false);
         context = getContext();
 
+        final AsyncTask_Your_suggestions get_user = new AsyncTask_Your_suggestions(getContext());
         get_user.execute("get_users","","");
 
+
+        mAdapter = new MyAdapter(getActivity().getSupportFragmentManager());
+        mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
+
+
+        //load more user based on slideview position
         final Handler ha=new Handler();
         ha.postDelayed(new Runnable() {
 
@@ -190,25 +117,65 @@ public class Your_Suggestions extends Fragment {
                 if(load_more==1){
 
                     load_more = 0;
-                    final AsyncTask_Your_suggestions get_user = new AsyncTask_Your_suggestions(getContext());
+                    final AsyncTask_Your_suggestions get_user = new AsyncTask_Your_suggestions(context);
                     get_user.execute("get_users", "", "");
-                    //Toast.makeText(getContext(), "loadingMoar", Toast.LENGTH_SHORT).show();
 
                 }
 
 
-                ha.postDelayed(this, 3000);
+                ha.postDelayed(this, 10);
             }
-        }, 3000);
+        }, 100);
 
-
-        // Inflate the layout for this fragment
         return view;
 
 
     }
 
 
+    public static class MyAdapter extends FragmentStatePagerAdapter {
+        public MyAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            FeedItem item = new FeedItem();
+            item.setPicture("");
+            item.setCheck(0);
+            item.setSC_username("");
+            if(feedsList!=null) {
+                item = feedsList.get(position);
+                if(item.getCheck()==1){
+                    load_more = 1;
+
+                }
+            }
+
+            return person_fragment.init(position,item);
+        }
+
+
+        @Override
+        public int getCount() {
+            if(feedsList!=null) {
+                return feedsList.size();
+            }
+            else{
+                return 1;
+            }
+        }
+
+
+        }
+
+
+
+
+
+
+/*
     private void setAnimation(View view, int position) {
         // If the bound view wasn't previously displayed on screen, it's animated
 
@@ -262,28 +229,9 @@ public class Your_Suggestions extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-*/
 @Override
 public void onStop() {
-    if(sliderShow!=null)
-    sliderShow.stopAutoCycle();
     super.onStop();
 }
     /**
@@ -314,15 +262,24 @@ public static void load_user(){
     public class AsyncTask_Your_suggestions extends android.os.AsyncTask<String, Void, String> {
 
         String doafter ="";
-        Context context;
+        private Context context;
         String type;
         int result_int;
-
+        private Context mContext;
+        String gender  ;
+        int minage     ;
+        int maxage     ;
+        String country ;
 
         public AsyncTask_Your_suggestions(Context activity) {
 
 
-            context = activity;
+            this.context = activity;
+            SharedPreferences filter = activity.getSharedPreferences("filter", Context.MODE_PRIVATE);
+             gender   = filter.getString("gender", "");
+             minage      = filter.getInt("minage", 13);
+             maxage      = filter.getInt("maxage", 99);
+             country  = filter.getString("country", "");
 
         }
 
@@ -337,17 +294,6 @@ public static void load_user(){
             if (type.equals("get_users")) {
                 try {
                     String URL = "http://snapchat.frozensparks.com/your_suggestions.php";
-
-
-                    SharedPreferences filter = context.getSharedPreferences("filter", Context.MODE_PRIVATE);
-                    String gender = filter.getString("gender", "");
-                    int minage = filter.getInt("minage", 13);
-                    int maxage = filter.getInt("maxage", 99);
-                    String country = filter.getString("country", "");
-
-
-
-
 
                     java.net.URL url = new URL(URL);
                     HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
@@ -441,12 +387,12 @@ public static void load_user(){
                     }
 
                     // Save state
-                    Parcelable recyclerViewState;
+                   /* Parcelable recyclerViewState;
                     recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
 
                     adapter = new RecycleViewAdapter_your_suggestions(Your_Suggestions.context, feedsList);
                     mRecyclerView.setAdapter(adapter);
-
+*/
 
                     // looping through All Contacts
                     for (int i = 0; i < toplevels.length(); i++) {
@@ -454,11 +400,11 @@ public static void load_user(){
 
 
                         final String id = c.getString("id");
-
                         final String gender = c.getString("gender");
                         final String sc_username = c.getString("sc_username");
                         final String year = c.getString("year");
                         final String value = c.getString("value");
+                        final String country = c.getString("country");
                         final int trigger = Integer.valueOf(c.getString("trigger"));
 
 
@@ -469,61 +415,29 @@ public static void load_user(){
 
 
 
-/*
-                        final View v = getActivity().getLayoutInflater().inflate(R.layout.personslideview, null);
 
-                        final ImageView target = (ImageView) v.findViewById(R.id.daimajia_slider_image);
-                        final ImageView target_shadow = v.findViewById(R.id.imageView4);
-                        //TextView description = (TextView)v.findViewById(R.id.description);
-                        ImageButton button = (ImageButton) v.findViewById(R.id.button2);
-                        ImageButton button3 = (ImageButton) v.findViewById(R.id.button3);
-                        final RelativeLayout load_more_check = v.findViewById(R.id.load_more_check);
-
-
-
-
-                        //final String PB_link = "http://snapchat.frozensparks.com/user/1/pictures/1.jpg";
-
-                        suggestion_person_view demoSlider = new suggestion_person_view(getActivity());
-                        demoSlider.images(PB_link);
-                        demoSlider.image(PB_link);
-
-                        if(trigger.equals("1")){
-                            demoSlider.trigger();
-                        }
-
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(getActivity(), sc_username, Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
-
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Toast.makeText(getActivity(), "2button"+sc_username, Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
-
-                        recyclerView_your_suggestions.addView(v);
-
-                        //sliderShow.addSlider(demoSlider);
-
-*/
                         FeedItem item = new FeedItem();
                         item.setPicture(PB_link);
+
+                        item.setGender(gender);
+                        item.setYear(year);
+                        item.setValue(value);
+                        item.setCountry(country);
                         item.setCheck(trigger);
                         item.setSC_username(sc_username);
+                        item.setID(id);
                         feedsList.add(item);
+                        //FeedItem FeedItem=item;
+
+                      //  mSwipeView.addView(new person_card(getContext(), FeedItem, mSwipeView));
 
                         // Restore state
-                        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+                       // mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
 
                     }
+                    mPager.getAdapter().notifyDataSetChanged();
+
                 } catch (final JSONException e) {
 
                     Log.d("json", String.valueOf(e));
@@ -543,5 +457,7 @@ public static void load_user(){
         }
 
     }
+
+
 
 }

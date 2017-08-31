@@ -12,4 +12,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="likes">LIKES</string>
+    <string name="uploadingPicNr">Uploading Picture Nr.:</string>
+    <string name="creating_ur_acc">Creating your account</string>
+    <string name="copied_scname">Copied Name to Clipboard</string>
+    <string name="you_like_it">You like it!</string>
+    <string name="youcannowaddpeople">You can now add people!</string>
+    <string name="welcomeback">Welcome Back,</string>
+    <string name="heystranger">Hey stranger!</string>
+    <string name="thispersonwouldliketoknowyou">This person would like to know who you are!</string>
+    <string name="toaddthispersonpleasesignup">To add this person, please join us!</string>
+    <string name="signup">Sign up</string>
+    <string name="no">No</string>
 </resources>

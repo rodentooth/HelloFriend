@@ -1,0 +1,463 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.frozensparks.hellofriend.SignUp.SignUp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:id="@+id/scrollView_SignUp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/relativeLayout6"
+                    android:background="#ffffff"
+                    android:elevation="3dp">
+
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/relativeLayout9"
+                        android:layout_below="@+id/relativeLayout8">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorPrimary">
+
+                                <ImageView
+                                    android:id="@+id/picprod1"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic1"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod1"
+                                    android:layout_alignTop="@+id/picprod1"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod2"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic2"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod2"
+                                    android:layout_alignTop="@+id/picprod2"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod3"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic3"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod3"
+                                    android:layout_alignTop="@+id/picprod3"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod4"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="center"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic4"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod4"
+                                    android:layout_alignTop="@+id/picprod4"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout8"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@color/colorPrimaryLight"
+                        android:elevation="11dp">
+
+                        <ImageView
+                            android:id="@+id/imageSignInnr3"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="16dp"
+                            android:src="@drawable/ic_three"
+                            android:tint="@color/colorHeartRed" />
+
+                        <TextView
+                            android:id="@+id/login_to_google_textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/imageSignInnr3"
+                            android:layout_alignTop="@+id/imageSignInnr3"
+                            android:layout_marginLeft="60dp"
+                            android:gravity="center_vertical"
+                            android:text="Upload Your Profile Photo"
+                            android:textSize="18sp" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout9"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/shadow1"
+                        android:elevation="20dp">
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:elevation="20dp">
+
+                        <Button
+                            android:id="@+id/SignUpButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentStart="true"
+                            android:adjustViewBounds="false"
+                            android:background="@color/colorHeartRed"
+                            android:elevation="20dp"
+                            android:scaleType="fitCenter"
+                            android:text="Create Account"
+                            android:textSize="20sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/shadow1">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/colorPrimaryLight"
+                    android:backgroundTint="@color/colorPrimaryLight"
+                    android:elevation="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/imageSignInnr1"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/ic_one"
+                        android:tint="@color/colorHeartRed" />
+
+                    <TextView
+                        android:id="@+id/login_to_google_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageSignInnr1"
+                        android:layout_alignTop="@+id/imageSignInnr1"
+                        android:layout_marginLeft="60dp"
+                        android:gravity="center_vertical"
+                        android:text="Verify with your Google Profile"
+                        android:textSize="18sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/shadow1"
+                        android:elevation="11dp">
+
+                    </RelativeLayout>
+
+                    <ImageButton
+                        android:id="@+id/signInImageBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:adjustViewBounds="false"
+                        android:background="@color/colorHeartRed"
+                        android:elevation="12dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_google" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/relativeLayout6"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shadow1"
+                    android:elevation="0dp"
+                    android:visibility="gone">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/relativeLayout4"
+                    android:background="#ffffff"
+                    android:elevation="3dp"
+                    android:visibility="invisible">
+
+
+                    <EditText
+                        android:id="@+id/editText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout5"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@color/colorPrimaryLight"
+                        android:elevation="11dp">
+
+                        <ImageView
+                            android:id="@+id/imageSignInnr2"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="16dp"
+                            android:src="@drawable/ic_two"
+                            android:tint="@color/colorHeartRed" />
+
+                        <TextView
+                            android:id="@+id/login_to_google_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/imageSignInnr2"
+                            android:layout_marginLeft="60dp"
+                            android:gravity="center_vertical"
+                            android:text="Join The Family"
+                            android:textSize="18sp" />
+                    </RelativeLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/relativeLayout5"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/UserName_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:hint="SnapChat name" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_input_layout"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="19dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio0"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_man"
+                            android:button="@android:color/transparent"
+                            android:tag="0" />
+
+                        <RadioButton
+                            android:id="@+id/radio1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_woman"
+                            android:button="@android:color/transparent"
+                            android:tag="1" />
+
+
+                        <RadioButton
+                            android:id="@+id/radio2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_nogender"
+                            android:button="@android:color/transparent"
+                            android:tag="2" />
+                    </RadioGroup>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_layout_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/radioGroup1"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true">
+
+                        <EditText
+                            android:id="@+id/Years_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:contextClickable="true"
+                            android:hint="Birth year"
+                            android:inputType="number"
+                            android:maxLength="4" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_Country"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_input_layout_date"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/country_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:hint="Country"
+                            android:inputType="none" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+            </RelativeLayout>
+        </ScrollView>
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:srcCompat="@mipmap/bg_ursugs" />
+
+    </RelativeLayout>
+</FrameLayout>

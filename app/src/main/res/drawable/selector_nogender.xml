@@ -1,0 +1,21 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:drawable="@drawable/ic_nogender_selected"
+        android:state_checked="true"
+        android:state_pressed="true"
+        android:tint="@color/colorAccent"
+        />
+    <item
+        android:drawable="@drawable/ic_nogender"
+        android:state_pressed="true" />
+    <item
+        android:drawable="@drawable/ic_nogender_selected"
+        android:state_checked="true"
+        android:backgroundTint="@color/colorAccent"
+        android:tint="@color/colorAccent"
+
+        />
+    <item
+        android:drawable="@drawable/ic_nogender"
+        />
+</selector>

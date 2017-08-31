@@ -1,4 +1,4 @@
-package com.frozensparks.hellofriend;
+package com.frozensparks.hellofriend.Tools;
 
 import android.content.Context;
 import android.content.SharedPreferences;
