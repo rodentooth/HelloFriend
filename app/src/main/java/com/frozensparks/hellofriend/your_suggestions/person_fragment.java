@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -41,6 +42,9 @@ import com.frozensparks.hellofriend.NewAndHot.Hot_People_fragment;
 import com.frozensparks.hellofriend.R;
 import com.frozensparks.hellofriend.SignUp.SignUp;
 import com.frozensparks.hellofriend.Tools.OnBackPressedListener;
+import com.frozensparks.hellofriend.Tools.PackageChecker;
+import com.frozensparks.hellofriend.likesAndDiamonds.DiamondFragment;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -119,13 +123,15 @@ public class person_fragment extends Fragment {
 
 
         ImageView daimajia_slider_image = layoutView.findViewById(R.id.daimajia_slider_image);
+
         RequestOptions options = new RequestOptions();
-        options.optionalFitCenter();
-        options.placeholder(getResources().getDrawable(R.drawable.ic_check));
+        options.centerCrop();
+
         Glide.with(this)
                 .load(pictureUrl)
                 .apply(options)
                 .into(daimajia_slider_image);
+
 
         ImageView daimajia_slider_image_background = layoutView.findViewById(R.id.daimajia_slider_image_background);
         Glide.with(this)
@@ -167,8 +173,13 @@ public class person_fragment extends Fragment {
 
             }
         }
-        final ImageButton like_btn_preson_preview = layoutView.findViewById(R.id.like_btn_suggestion);
+        final ImageButton like_btn_preson_preview = layoutView.findViewById(R.id.like_btn_suggestion_tobegone);
+        final ShineButton like_btn_preson_preview_tobegone = layoutView.findViewById(R.id.like_btn_suggestion);
+
         final ImageButton liked_btn_preson_preview = layoutView.findViewById(R.id.liked_btn_suggestion);
+
+
+
         liked_btn_preson_preview.setVisibility(View.VISIBLE);
         liked_btn_preson_preview.setVisibility(View.INVISIBLE);
 
@@ -176,21 +187,26 @@ public class person_fragment extends Fragment {
 
         if (blockstring2.contains(",")) {
             String[] separated = blockstring2.split(",");
+            String ids="";
+            if(id!=0) {
+                ids = String.valueOf(id);
+            }
 
             for (int j = 0; j < separated.length; j++) {
-                if (separated[j].equals(id)) {
+                if (separated[j].equals(ids)) {
 
                     liked_btn_preson_preview.setVisibility(View.VISIBLE);
-                    like_btn_preson_preview.setVisibility(View.INVISIBLE);
+                    like_btn_preson_preview.setVisibility(View.GONE);
 
 
                 }
+
             }
         } else {
-            if (blockstring2.equals(id)) {
+            if (blockstring2.equals(String.valueOf(id))) {
 
                 liked_btn_preson_preview.setVisibility(View.VISIBLE);
-                like_btn_preson_preview.setVisibility(View.INVISIBLE);
+                like_btn_preson_preview.setVisibility(View.GONE);
 
             }
         }
@@ -209,6 +225,12 @@ public class person_fragment extends Fragment {
                 break;
 
         }
+
+
+
+        TextView desc_diamond_amount_suggestion = layoutView.findViewById(R.id.desc_diamond_amount_suggestion);
+        desc_diamond_amount_suggestion.setText(": "+ value);
+
         TextView desc_preview = layoutView.findViewById(R.id.desc_preview_suggestion);
 
         int Age = Calendar.getInstance().get(Calendar.YEAR) - year;
@@ -264,52 +286,98 @@ public class person_fragment extends Fragment {
                         alertDialog.show();
 
                     }
-                    else{
-                    int finalRadius = Math.max(view.getWidth(), view.getHeight());
-
-                    // create the animator for this view (the start radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(addedonSnap_personpreview, (int) motionEvent.getX(), (int) motionEvent.getY(),
-                            0, finalRadius);
-                    anim.setDuration(1000);
-                    anim.setInterpolator(new FastOutSlowInInterpolator());
+                    else {
 
 
-                    // make the view visible and start the animation
-                    addedonSnap_personpreview.setVisibility(View.VISIBLE);
-                    anim.start();
+                        SharedPreferences prefs = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                        int credits = (prefs.getInt("credits", 0));
 
-                    anim.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animator) {
 
+                            int finalRadius = Math.max(view.getWidth(), view.getHeight());
+
+                            // create the animator for this view (the start radius is zero)
+                            Animator anim = ViewAnimationUtils.createCircularReveal(addedonSnap_personpreview, (int) motionEvent.getX(), (int) motionEvent.getY(),
+                                    0, finalRadius);
+                            anim.setDuration(1000);
+                            anim.setInterpolator(new FastOutSlowInInterpolator());
+
+
+                            // make the view visible and start the animation
+                            addedonSnap_personpreview.setVisibility(View.VISIBLE);
+                            anim.start();
+
+                            anim.addListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator) {
+
+                                    addonSnap_personpreview.setVisibility(View.GONE);
+
+                                    final AsyncTask_suggestion get_user = new AsyncTask_suggestion(getContext());
+                                    get_user.execute("buy_id", String.valueOf(id), SC_username, String.valueOf(value));
+
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) {
+
+                                }
+                            });
                         }
-
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
-
-                            addonSnap_personpreview.setVisibility(View.GONE);
-
-                            final AsyncTask_suggestion get_user = new AsyncTask_suggestion(getContext());
-                            get_user.execute("buy_id", String.valueOf(id), SC_username);
-
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animator) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animator) {
-
-                        }
-                    });
-                }
 
                 }
                 return false;
             }
         });
+
+        final ImageButton flagperson_btn = layoutView.findViewById(R.id.flag_person);
+        flagperson_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext());
+
+                // set title
+                alertDialogBuilder.setTitle(R.string.reportthisperson);
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int i) {
+
+                                final AsyncTask_suggestion get_user = new AsyncTask_suggestion(getContext());
+                                get_user.execute("flag", String.valueOf(id), String.valueOf(id));
+
+                                flagperson_btn.setClickable(false);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+        });
+
 
         final Boolean finalCanadd = canadd;
         addedonSnap_personpreview.setOnClickListener(new View.OnClickListener() {
@@ -317,8 +385,22 @@ public class person_fragment extends Fragment {
             public void onClick(View view) {
 
                 if (finalCanadd) {
-                    Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + SC_username));
-                    getContext().startActivity(internetIntent);
+
+
+                    boolean isAppInstalled = PackageChecker.appInstalledOrNot("com.snapchat.android", getContext());
+
+                    if(isAppInstalled) {
+
+                        Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + SC_username));
+                        getActivity().startActivity(internetIntent);
+
+                    } else {
+
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat.com/add/"+SC_username));
+                        startActivity(browserIntent);
+
+                    }
+
 
                     Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
                     View view2 = snack.getView();
@@ -329,7 +411,7 @@ public class person_fragment extends Fragment {
             }
         });
 
-        like_btn_preson_preview.setOnTouchListener(new View.OnTouchListener() {
+        like_btn_preson_preview_tobegone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -355,9 +437,9 @@ public class person_fragment extends Fragment {
                                 .setPositiveButton(R.string.signup, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        SignUp nextFrag= new SignUp();
+                                        SignUp nextFrag = new SignUp();
                                         getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.content_main, nextFrag,"")
+                                                .replace(R.id.content_main, nextFrag, "")
                                                 .addToBackStack(null)
                                                 .commit();
 
@@ -377,50 +459,51 @@ public class person_fragment extends Fragment {
                         // show it
                         alertDialog.show();
 
+                    } else {
+
+
+                            int finalRadius = Math.max(view.getWidth(), view.getHeight());
+
+                            // create the animator for this view (the start radius is zero)
+                            Animator anim = ViewAnimationUtils.createCircularReveal(liked_btn_preson_preview, (int) motionEvent.getX(), (int) motionEvent.getY(),
+                                    0, finalRadius);
+                            anim.setDuration(1000);
+                            anim.setInterpolator(new FastOutSlowInInterpolator());
+
+
+                            // make the view visible and start the animation
+                            liked_btn_preson_preview.setVisibility(View.VISIBLE);
+                            anim.start();
+
+                            anim.addListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator) {
+
+                                    like_btn_preson_preview.setVisibility(View.GONE);
+
+                                    final AsyncTask_suggestion get_user = new AsyncTask_suggestion(getContext());
+                                    get_user.execute("like", String.valueOf(id), String.valueOf(id));
+
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) {
+
+                                }
+                            });
+                        }
                     }
-                    else{
 
-                    int finalRadius = Math.max(view.getWidth(), view.getHeight());
-
-                    // create the animator for this view (the start radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(liked_btn_preson_preview, (int) motionEvent.getX(), (int) motionEvent.getY(),
-                            0, finalRadius);
-                    anim.setDuration(1000);
-                    anim.setInterpolator(new FastOutSlowInInterpolator());
-
-
-                    // make the view visible and start the animation
-                    liked_btn_preson_preview.setVisibility(View.VISIBLE);
-                    anim.start();
-
-                    anim.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animator) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animator) {
-
-                            like_btn_preson_preview.setVisibility(View.GONE);
-
-                            final AsyncTask_suggestion get_user = new AsyncTask_suggestion(getContext());
-                            get_user.execute("like", String.valueOf(id), String.valueOf(id));
-
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animator) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animator) {
-
-                        }
-                    });
-                }
-                }
 
                 return false;
             }
@@ -441,7 +524,7 @@ public class person_fragment extends Fragment {
         String doafter = "";
         Context context;
         String type;
-        int result_int;
+        int value;
         String sc_username;
 
 
@@ -462,6 +545,8 @@ public class person_fragment extends Fragment {
             if (type.equals("buy_id")) {
                 try {
                     sc_username = params[2];
+                    value = Integer.valueOf(params[3]);
+
 
                     String URL = "http://snapchat.frozensparks.com/buy_name.php";
 
@@ -553,8 +638,54 @@ public class person_fragment extends Fragment {
 
             }
 
+            if (type.equals("flag")) {
+                try {
+                    sc_username = params[2];
 
-            return null;
+                    String URL = "http://snapchat.frozensparks.com/report.php";
+
+
+                    SharedPreferences filter = context.getSharedPreferences("user", MODE_PRIVATE);
+                    int id = filter.getInt("userid", 0);
+
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("my_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&" +
+                            URLEncoder.encode("id_to_report", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+                return null;
         }
 
 
@@ -576,12 +707,27 @@ public class person_fragment extends Fragment {
 
 
                 if (type.equals("buy_id")) {
-                    if (result.equals("OK")) {
-                        //todo Credits Abziehen
+                    if (result.contains("OK")) {
 
 
-                        Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
-                        context.startActivity(internetIntent);
+                        SharedPreferences.Editor editor1 = getActivity().getSharedPreferences("user", MODE_PRIVATE).edit();
+                        editor1.putInt("credits", Integer.valueOf(result.substring(2)));
+                        editor1.apply();
+
+
+                        boolean isAppInstalled = PackageChecker.appInstalledOrNot("com.snapchat.android", getContext());
+
+                        if (isAppInstalled) {
+
+                            Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
+                            context.startActivity(internetIntent);
+
+                        } else {
+
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat.com/add/" + sc_username));
+                            startActivity(browserIntent);
+
+                        }
 
 
                         Snackbar snack = Snackbar.make(getView(), R.string.copied_scname, Snackbar.LENGTH_LONG);
@@ -605,16 +751,53 @@ public class person_fragment extends Fragment {
 
                     } else {
 
-                        //todo nicht gekauft, new credits
-                        //int credits = String.valueOf(result);
+                        SharedPreferences.Editor editor1 = getActivity().getSharedPreferences("user", MODE_PRIVATE).edit();
+                        editor1.putInt("credits", Integer.valueOf(result));
+                        editor1.apply();
+
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                getContext());
+
+                        // set title
+                        alertDialogBuilder.setTitle(R.string.missingdiamonds);
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage(R.string.youhavenotenoughdiamonds)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.showme, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+
+                                        DiamondFragment nextFrag= new DiamondFragment();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.content_main, nextFrag,"DiamondFragment")
+                                                .addToBackStack(null)
+                                                .commit();
+
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
                     }
+                }
 
                 }
 
                 if (type.equals("like")) {
                     if (result.equals("OK")) {
-                        //todo Credits Abziehen
-
 
                         SharedPreferences prefs2 = context.getSharedPreferences(
                                 "user_storage", Context.MODE_PRIVATE);
@@ -631,13 +814,35 @@ public class person_fragment extends Fragment {
                         snack.show();
                     } else {
 
-                        //todo nicht gekauft, new credits
-                        //int credits = String.valueOf(result);
                     }
 
                 }
 
-            }
+                if (type.equals("flag")) {
+                    if (result.equals("OK")) {
+
+                        SharedPreferences prefs2 = context.getSharedPreferences(
+                                "user_storage", Context.MODE_PRIVATE);
+                        final String blockstring = prefs2.getString("flag", "0");
+
+                        SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                        editor.putString("flag", blockstring + "," + id);
+                        editor.apply();
+
+                        Snackbar snack = Snackbar.make(getView(), R.string.userreported, Snackbar.LENGTH_LONG);
+                        View view2 = snack.getView();
+                        TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
+                        tv.setTextColor(Color.WHITE);
+                        snack.show();
+                    } else {
+
+
+                    }
+
+                }
+
+                }
         }
-    }
+
+
 }

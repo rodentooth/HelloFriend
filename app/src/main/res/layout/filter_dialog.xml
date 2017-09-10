@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/radioGroup1_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="19dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio0_filter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/selector_man"
+            android:button="@android:color/transparent"
+            android:tag="0" />
+
+        <RadioButton
+            android:id="@+id/radio1_filter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/selector_woman"
+            android:button="@android:color/transparent"
+            android:tag="1" />
+
+
+        <RadioButton
+            android:id="@+id/radio2_filter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/selector_nogender"
+            android:button="@android:color/transparent"
+            android:tag="2" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/minagepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-"
+            android:textAlignment="center"
+            android:textSize="50sp" />
+
+        <NumberPicker
+            android:id="@+id/maxagepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_Country_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/country_input_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:hint="@string/country"
+            android:inputType="none" />
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/clearfilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="@string/clear"
+            android:textColor="@color/colorAccent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/cancelfilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_toStartOf="@+id/saveandapplyfilter"
+            android:background="#00000000"
+            android:text="@android:string/cancel"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/saveandapplyfilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:text="@string/saveandapply"
+            android:textColor="@color/colorAccent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</LinearLayout>

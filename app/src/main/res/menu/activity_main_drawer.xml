@@ -3,15 +3,15 @@
 
 
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_your_suggestions"
-            android:title="Your Suggestions" />
+            android:title="@string/yoursuggestions" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_whatshot_black"
-            android:title="New &amp; Hot" />
+            android:title="@string/newandhot" />
     </group>
 
     <group android:checkableBehavior="none"
@@ -20,7 +20,7 @@
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_person_black"
-            android:title="Your Profile" />
+            android:title="@string/yourprofile" />
     </group>
 
 
@@ -29,12 +29,9 @@
         >
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Get More Diamonds" />
+            android:icon="@drawable/ic_diamond"
+            android:title="@string/your_diamonds" />
     </group>
-
-
-
 
 
 </menu>

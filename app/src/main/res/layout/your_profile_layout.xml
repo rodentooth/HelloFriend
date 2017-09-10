@@ -23,6 +23,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/profilpicture_porfile_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/keilandmainLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-30dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="30dp"
+            android:adjustViewBounds="false"
+            android:elevation="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/keilandmainLayout"
+            app:srcCompat="@drawable/ic_person_black"
+            tools:layout_editor_absoluteX="180dp" />
+
+        <ImageView
+            android:id="@+id/profilpicture_porfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/keilandmainLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
+            android:adjustViewBounds="false"
+            android:elevation="10dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/keilandmainLayout"
+            app:srcCompat="@drawable/ic_person_black"
+            tools:layout_editor_absoluteX="180dp" />
+
         <RelativeLayout
             android:id="@+id/keilandmainLayout"
             android:layout_width="match_parent"
@@ -45,135 +78,182 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:srcCompat="@drawable/ic_keil" />
 
-            <LinearLayout
+            <ScrollView
                 android:id="@+id/linearLayout_main_your_profile"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_below="@+id/keil_your_profile"
                 android:background="@android:color/white"
-                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:clipToPadding="false"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
-                <LinearLayout
-                    android:id="@+id/picturebar_your_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="30dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/profile_picturebar_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:elevation="10dp"
-                        app:srcCompat="@mipmap/bg_ursugs" />
-
-                    <ImageView
-                        android:id="@+id/profile_picturebar_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:elevation="10dp"
-                        app:srcCompat="@mipmap/bg_ursugs" />
-
-                    <ImageView
-                        android:id="@+id/profile_picturebar_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        app:srcCompat="@mipmap/bg_ursugs" />
-
-                    <ImageView
-                        android:id="@+id/profile_picturebar_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        app:srcCompat="@mipmap/bg_ursugs" />
-                </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/your_profile_likes_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="8dp">
+                    android:layout_height="500dp"
+                    android:background="@android:color/white"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:id="@+id/picturebar_your_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="30dp"
+                        android:elevation="10dp"
+                        android:orientation="horizontal"
+                        android:padding="4dp">
 
-                        <TextView
-                            android:id="@+id/LIKES_amount"
+                        <ImageView
+                            android:id="@+id/profile_picturebar_1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorHeartRed"
-                            android:text="50" />
-
-                        <TextView
-                            android:id="@+id/LIKES"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="100dp"
                             android:layout_weight="1"
-                            android:text="LIKES" />
+                            android:adjustViewBounds="true"
+                            android:elevation="10dp"
+                            app:srcCompat="@mipmap/bg_suggestions_1" />
+
+                        <ImageView
+                            android:id="@+id/profile_picturebar_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:elevation="10dp"
+                            app:srcCompat="@mipmap/bg_suggestions_1" />
+
+                        <ImageView
+                            android:id="@+id/profile_picturebar_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            app:srcCompat="@mipmap/bg_suggestions_1" />
+
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/button4"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/your_profile_likes_bar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Button" />
+                        android:layout_marginTop="20dp"
+                        android:elevation="10dp"
+                        android:orientation="horizontal"
+                        tools:layout_editor_absoluteX="8dp"
+                        tools:layout_editor_absoluteY="8dp">
 
-                </LinearLayout>
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
 
-                <LinearLayout
-                    android:id="@+id/your_profile_edit_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="20dp">
+                            <TextView
+                                android:id="@+id/LIKES_amount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1.00"
+                                android:text="0"
+                                android:textSize="50sp" />
 
-                    <TextView
-                        android:id="@+id/Edit_your_profile_text"
-                        android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentBottom="false"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentTop="false"
+                                android:layout_centerHorizontal="false"
+                                android:layout_centerInParent="true"
+                                android:layout_toEndOf="@+id/LIKES_amount"
+                                android:gravity="center"
+                                android:text="@string/show"
+                                android:textSize="50sp" />
+
+                            <TextView
+                                android:id="@+id/LIKES"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="false"
+                                android:layout_below="@+id/LIKES_amount"
+                                android:layout_centerHorizontal="true"
+                                android:layout_weight="1.00"
+                                android:text="LIKES" />
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/your_profile_edit_bar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="50dp"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1"
-                        android:background="@color/colorHeartRed"
-                        android:text="Edit Your Profile"
-                        android:textAlignment="viewStart" />
+                        android:background="@android:color/white"
+                        android:elevation="10dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        tools:layout_editor_absoluteX="8dp"
+                        tools:layout_editor_absoluteY="20dp">
 
+                        <TextView
+                            android:id="@+id/SnapChatName_yourProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="SnapChat Name:"
+                            android:textAlignment="center"
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:id="@+id/gender_your_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/ic_man" />
+
+                        <TextView
+                            android:id="@+id/age_yourprofile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Age:"
+                            android:textAlignment="center"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/country_your_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Country:"
+                            android:textAlignment="center"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/Edit_Your_Profile_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:background="#ffffff"
+                            android:elevation="5dp"
+                            android:text="@string/edityourprofile" />
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </ScrollView>
+
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/profilpicture_porfile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/keilandmainLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="-30dp"
-            android:layout_marginTop="30dp"
-            android:adjustViewBounds="false"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/keilandmainLayout"
-            app:srcCompat="@drawable/ic_person_black"
-            tools:layout_editor_absoluteX="180dp" />
     </RelativeLayout>
 
 </RelativeLayout>

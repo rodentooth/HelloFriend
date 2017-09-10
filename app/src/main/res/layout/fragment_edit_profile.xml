@@ -1,0 +1,351 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.frozensparks.hellofriend.SignUp.SignUp">
+
+
+    <RelativeLayout
+        android:id="@+id/bgtorequestfocus_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ScrollView
+            android:id="@+id/scrollView_edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout7_edit_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/relativeLayout6"
+                    android:background="#ffffff"
+                    android:elevation="3dp">
+
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/relativeLayout9_edit_profile"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorPrimary">
+
+                                <ImageView
+                                    android:id="@+id/picprod1_edit_profile"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic1_edit_profile"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod1_edit_profile"
+                                    android:layout_alignTop="@+id/picprod1_edit_profile"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod2_edit_profile"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic2_edit_profile"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod2_edit_profile"
+                                    android:layout_alignTop="@+id/picprod2_edit_profile"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod3_edit_profile"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic3_edit_profile"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod3_edit_profile"
+                                    android:layout_alignTop="@+id/picprod3_edit_profile"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/picprod4_edit_profile"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1"
+                                    android:adjustViewBounds="true"
+                                    android:background="@color/colorPrimaryDark"
+                                    android:scaleType="center"
+                                    app:srcCompat="@drawable/ic_tag_faces_black_24dp" />
+
+                                <Button
+                                    android:id="@+id/deletepic4_edit_profile"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignEnd="@+id/picprod4_edit_profile"
+                                    android:layout_alignTop="@+id/picprod4_edit_profile"
+                                    android:background="#7effffff"
+                                    android:text="X"
+                                    android:textSize="30sp" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout9_edit_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/shadow1"
+                        android:elevation="20dp">
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:elevation="20dp">
+
+
+                        <Button
+                            android:id="@+id/UpdateProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentStart="true"
+                            android:adjustViewBounds="false"
+                            android:background="@color/colorAccent"
+                            android:elevation="20dp"
+                            android:text="@string/update_account"
+                            android:textColor="#ffffff"
+
+                            android:textSize="20sp" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/shadow1">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignTop="@+id/relativeLayout6"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shadow1"
+                    android:elevation="0dp"
+                    android:visibility="gone">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:background="#ffffff"
+                    android:elevation="3dp"
+                    android:visibility="visible">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/UserName_input_edit_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:hint="SnapChat name" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup1_edit_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_input_layout"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="19dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio0_edit_profile"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_man"
+                            android:button="@android:color/transparent"
+                            android:tag="0" />
+
+                        <RadioButton
+                            android:id="@+id/radio1_edit_profile"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_woman"
+                            android:button="@android:color/transparent"
+                            android:tag="1" />
+
+
+                        <RadioButton
+                            android:id="@+id/radio2_edit_profile"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/selector_nogender"
+                            android:button="@android:color/transparent"
+                            android:tag="2" />
+                    </RadioGroup>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_layout_date_edit_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/radioGroup1_edit_profile"
+                        android:layout_marginTop="10dp"
+                        android:clickable="true">
+
+                        <EditText
+                            android:id="@+id/Years_input_edit_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:contextClickable="true"
+                            android:hint="Birth year"
+                            android:inputType="number"
+                            android:maxLength="4" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/text_input_Country"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text_input_layout_date_edit_profile"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/country_input_edit_profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:hint="Country"
+                            android:inputType="none" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/genderdesc_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/text_input_layout_date_edit_profile"
+                        android:layout_alignTop="@+id/radioGroup1_edit_profile"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@+id/radioGroup1_edit_profile"
+                        android:gravity="center_vertical" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+</FrameLayout>

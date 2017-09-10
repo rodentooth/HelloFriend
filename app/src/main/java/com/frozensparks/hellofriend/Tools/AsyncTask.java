@@ -122,13 +122,6 @@ public class AsyncTask extends android.os.AsyncTask<String, Void, String> {
             Log.d("AsyncTask says",result);
         }
 
-
-        if (doafter.equals("")) {
-            //todo
-        }
-
-
-
     }
 
 }

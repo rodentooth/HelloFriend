@@ -1,6 +1,7 @@
 package com.frozensparks.hellofriend.NewAndHot;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,8 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +44,11 @@ import com.frozensparks.hellofriend.Tools.BaseBackPressedListener;
 import com.frozensparks.hellofriend.MainActivity;
 import com.frozensparks.hellofriend.Tools.OnBackPressedListener;
 import com.frozensparks.hellofriend.R;
+import com.frozensparks.hellofriend.Tools.PackageChecker;
+import com.frozensparks.hellofriend.Tools.SwipeBackLayout;
+import com.frozensparks.hellofriend.likesAndDiamonds.DiamondFragment;
+import com.google.firebase.auth.ActionCodeResult;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +65,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.Date;
+
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
@@ -71,6 +82,11 @@ public class Hot_People_fragment extends Fragment {
     int position;
     int totalrows;
     View view;
+    RelativeLayout empty_state;
+    SwipeRefreshLayout swipeRefreshLayout;
+    int seconds;
+
+    private SwipeBackLayout swipeBackLayout;
 
     @Nullable
     @Override
@@ -80,10 +96,56 @@ public class Hot_People_fragment extends Fragment {
         view = inflater.inflate(R.layout.content, container, false);
 
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-        AppBarLayout.LayoutParams params =
-                (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+        empty_state = view.findViewById(R.id.empty_state_content);
+        empty_state.setVisibility(View.VISIBLE);
+        empty_state.setVisibility(View.INVISIBLE);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+
+        seconds = ((int) System.currentTimeMillis()/1000);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if ((((int) System.currentTimeMillis()/1000) - seconds)<20){
+                    final Handler haupload=new Handler();
+                    haupload.postDelayed(new Runnable() {
+
+
+                        @Override
+                        public void run() {
+
+                            swipeRefreshLayout.setRefreshing(false);
+
+
+
+                        }
+                    }, 2000);
+
+                }
+                else{
+
+                    seconds = ((int) System.currentTimeMillis()/1000);
+
+                    final LinearLayout contentlist1 = view.findViewById(R.id.contentlist1);
+                    contentlist1.removeAllViews();
+                    final LinearLayout contentlist2 = view.findViewById(R.id.contentlist2);
+                    contentlist2.removeAllViews();
+                    LinearLayout contentlist3 = view.findViewById(R.id.contentlist3);
+                    contentlist3.removeAllViews();
+
+                    position =0;
+
+                    final AsyncTask_hotPeople get_user = new AsyncTask_hotPeople(getContext());
+                    get_user.execute("get_users", "", "");
+
+                }
+            }
+        });
+
+            // Stop refresh animation
+
 
 
         ((MainActivity) getActivity()).setOnBackPressedListener(new BaseBackPressedListener(getActivity()));
@@ -102,7 +164,7 @@ public class Hot_People_fragment extends Fragment {
         String doafter = "";
         Context context;
         String type;
-        int result_int;
+        int value;
         String sc_username;
 
 
@@ -118,6 +180,53 @@ public class Hot_People_fragment extends Fragment {
         protected String doInBackground(String... params) {
 
             type = params[0];
+
+
+            if (type.equals("flag")) {
+                try {
+                    sc_username = params[2];
+
+                    String URL = "http://snapchat.frozensparks.com/report.php";
+
+
+                    SharedPreferences filter = context.getSharedPreferences("user", MODE_PRIVATE);
+                    int id = filter.getInt("userid", 0);
+
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("my_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(id), "UTF-8") + "&" +
+                            URLEncoder.encode("id_to_report", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
 
             if (type.equals("get_users")) {
@@ -173,6 +282,7 @@ public class Hot_People_fragment extends Fragment {
             if (type.equals("buy_id")) {
                 try {
                     sc_username = params[2];
+                    value = Integer.valueOf(params[3]);
 
                     String URL = "http://snapchat.frozensparks.com/buy_name.php";
 
@@ -287,15 +397,36 @@ public class Hot_People_fragment extends Fragment {
 
 
                 if (type.equals("buy_id")) {
-                    if (result.equals("OK")) {
-                        //todo Credits Abziehen
+                    if (result.contains("OK")) {
 
 
-                        Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
-                        context.startActivity(internetIntent);
+                        SharedPreferences filter = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                        int credits = (filter.getInt("credits", 0));
+
+                        SharedPreferences.Editor editor1 = getActivity().getSharedPreferences("user", MODE_PRIVATE).edit();
+                        editor1.putInt("credits", Integer.valueOf(result.substring(2)));
+                        editor1.apply();
 
 
-                        Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
+                        boolean isAppInstalled = PackageChecker.appInstalledOrNot("com.snapchat.android", getContext());
+
+                        if (isAppInstalled) {
+
+                            Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
+                            context.startActivity(internetIntent);
+
+                        } else {
+
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat.com/add/" + sc_username));
+                            startActivity(browserIntent);
+
+                        }
+
+
+
+
+
+                    Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
                         View view2 = snack.getView();
                         TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
                         tv.setTextColor(Color.WHITE);
@@ -316,17 +447,53 @@ public class Hot_People_fragment extends Fragment {
 
                     } else {
 
-                        //todo nicht gekauft, new credits
-                        //int credits = String.valueOf(result);
+
+                        SharedPreferences.Editor editor1 = getActivity().getSharedPreferences("user", MODE_PRIVATE).edit();
+                        editor1.putInt("credits", Integer.valueOf(result));
+                        editor1.apply();
+
+
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                getContext());
+
+                        // set title
+                        alertDialogBuilder.setTitle(R.string.missingdiamonds);
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage(R.string.youhavenotenoughdiamonds)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.showme, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        DiamondFragment nextFrag= new DiamondFragment();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.content_main, nextFrag,"DiamondFragment")
+                                                .addToBackStack(null)
+                                                .commit();
+
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
                     }
 
                 }
 
                 if (type.equals("like")) {
                     if (result.equals("OK")) {
-                        //todo Credits Abziehen
-
-
                         SharedPreferences prefs2 = context.getSharedPreferences(
                                 "user_storage", Context.MODE_PRIVATE);
                         final String blockstring = prefs2.getString("like", "0");
@@ -340,14 +507,30 @@ public class Hot_People_fragment extends Fragment {
                         TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
                         tv.setTextColor(Color.WHITE);
                         snack.show();
-                    } else {
-
-                        //todo nicht gekauft, new credits
-                        //int credits = String.valueOf(result);
                     }
 
 
                 }
+                if (type.equals("flag")) {
+                    if (result.equals("OK")) {
+
+                        SharedPreferences prefs2 = context.getSharedPreferences(
+                                "user_storage", Context.MODE_PRIVATE);
+                        final String blockstring = prefs2.getString("flag", "0");
+
+                        SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                        editor.putString("flag", blockstring + "," + sc_username);
+                        editor.apply();
+
+                        Snackbar snack = Snackbar.make(getView(), R.string.userreported, Snackbar.LENGTH_LONG);
+                        View view2 = snack.getView();
+                        TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
+                        tv.setTextColor(Color.WHITE);
+                        snack.show();
+                    }
+
+                }
+
                 if (type.equals("get_users")) try {
                     position = position + 10;
 
@@ -359,12 +542,16 @@ public class Hot_People_fragment extends Fragment {
 
                     // Getting JSON Array node
 
-                    if (totalrows == 0) {
+                    if(totalrows==0){
+                        final LinearLayout contentlist1 = view.findViewById(R.id.contentlist1);
 
-                        //todo no data
-
-
+                        if(contentlist1.getChildCount()==0)
+                            empty_state.setVisibility(View.VISIBLE);
                     }
+                    else{
+                        empty_state.setVisibility(View.GONE);
+                    }
+
                     JSONArray toplevels = jsonObj.getJSONArray("USERS");
 
 
@@ -375,6 +562,10 @@ public class Hot_People_fragment extends Fragment {
                     adapter = new RecycleViewAdapter_your_suggestions(Your_Suggestions.context, feedsList);
                     mRecyclerView.setAdapter(adapter);
 */
+
+                    SharedPreferences prefs2 = context.getSharedPreferences(
+                            "user_storage", Context.MODE_PRIVATE);
+                    final String blockstring = prefs2.getString("flag", "0");
 
                     // looping through All Contacts
                     for (int i = 0; i < toplevels.length(); i++) {
@@ -432,8 +623,18 @@ public class Hot_People_fragment extends Fragment {
                         final View personpreview = getLayoutInflater().inflate(R.layout.personpreview, null);
 
                         image.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("ClickableViewAccessibility")
                             @Override
                             public void onClick(View view) {
+
+
+
+                                final Animation slide_up1 = AnimationUtils.loadAnimation(context,
+                                        R.anim.slide_down);
+                                slide_up1.setInterpolator(new FastOutSlowInInterpolator());
+                                slide_up1.setStartOffset(0);
+
+
 
                                 final ImageButton addonSnap_personpreview = personpreview.findViewById(R.id.addonSnap_personpreview);
                                 addonSnap_personpreview.setVisibility(View.VISIBLE);
@@ -441,6 +642,23 @@ public class Hot_People_fragment extends Fragment {
                                 addedonSnap_personpreview.setVisibility(View.VISIBLE);
                                 addedonSnap_personpreview.setVisibility(View.INVISIBLE);
 
+                                RelativeLayout clicktodismiss_prevbg  = (RelativeLayout) personpreview.findViewById(R.id.clicktodismiss_prevbg);
+
+                                final RelativeLayout rlbg = (RelativeLayout) personpreview.findViewById(R.id.personpreviewbg);
+
+
+                                rlbg.setAlpha(1);
+                                SwipeBackLayout swipeBackLayout = (SwipeBackLayout) personpreview.findViewById(R.id.swipeBackLayout);
+                                swipeBackLayout.setEnableFlingBack(true);
+                                swipeBackLayout.setParentToRemove(personpreview);
+
+                                swipeBackLayout.setOnSwipeBackListener(new SwipeBackLayout.SwipeBackListener() {
+                                    @Override
+                                    public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+
+                                        rlbg.setAlpha(1-fractionScreen);
+                                    }
+                                });
 
                                 Boolean canadd = false;
                                 SharedPreferences prefs2 = context.getSharedPreferences(
@@ -468,7 +686,51 @@ public class Hot_People_fragment extends Fragment {
 
                                     }
                                 }
-                                final ImageButton like_btn_preson_preview = personpreview.findViewById(R.id.like_btn_preson_preview);
+
+
+                                final ImageButton flagperson_btn = personpreview.findViewById(R.id.flag_newhot);
+                                flagperson_btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                                getContext());
+
+                                        // set title
+                                        alertDialogBuilder.setTitle(R.string.reportthisperson);
+
+                                        // set dialog message
+                                        alertDialogBuilder
+                                                .setCancelable(false)
+                                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int i) {
+
+                                                        final AsyncTask_hotPeople get_user = new AsyncTask_hotPeople(getContext());
+                                                        get_user.execute("flag", String.valueOf(id), String.valueOf(id));
+
+                                                        flagperson_btn.setClickable(false);
+                                                    }
+                                                })
+                                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        // if this button is clicked, just close
+                                                        // the dialog box and do nothing
+                                                        dialog.cancel();
+                                                    }
+                                                });
+
+                                        // create alert dialog
+                                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                                        // show it
+                                        alertDialog.show();
+                                    }
+                                });
+
+
+                                final ShineButton like_btn_preson_preview_clicker = personpreview.findViewById(R.id.like_btn_preson_preview);
+                                final ImageButton like_btn_preson_preview = personpreview.findViewById(R.id.like_btn_preson_preview_tobegone);
+
                                 final ImageButton liked_btn_preson_preview = personpreview.findViewById(R.id.liked_btn_preson_preview);
                                 liked_btn_preson_preview.setVisibility(View.VISIBLE);
                                 liked_btn_preson_preview.setVisibility(View.INVISIBLE);
@@ -505,7 +767,26 @@ public class Hot_People_fragment extends Fragment {
 
 
                                 if (personpreview.getParent() != null) {
-                                    ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                    slide_up1.setAnimationListener(new Animation.AnimationListener() {
+                                        @Override
+                                        public void onAnimationStart(Animation animation) {
+
+                                        }
+
+                                        @Override
+                                        public void onAnimationEnd(Animation animation) {
+                                            ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                        }
+
+                                        @Override
+                                        public void onAnimationRepeat(Animation animation) {
+
+                                        }
+                                    });
+                                    personpreview.setAnimation(slide_up1);
+
                                 }
                                 getActivity().addContentView(personpreview, lp);
 
@@ -568,15 +849,24 @@ public class Hot_People_fragment extends Fragment {
                                         break;
 
                                 }
+
+
+                                TextView desc_diamond_amount_suggestion = personpreview.findViewById(R.id.desc_diamond_amount);
+                                desc_diamond_amount_suggestion.setText(": "+ value);
+
                                 TextView desc_preview = personpreview.findViewById(R.id.desc_preview);
 
                                 int Age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(year);
 
                                 desc_preview.setText(Age + ", " + Country);
 
+
+
                                 addonSnap_personpreview.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View view, MotionEvent motionEvent) {
+
+
 
                                         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
@@ -606,8 +896,29 @@ public class Hot_People_fragment extends Fragment {
                                                                         .commit();
 
                                                                 if (personpreview != null)
-                                                                    personpreview.setVisibility(View.GONE);
-                                                                ((ViewManager) personpreview.getParent()).removeView(personpreview);
+
+
+                                                                    slide_up1.setAnimationListener(new Animation.AnimationListener() {
+                                                                        @Override
+                                                                        public void onAnimationStart(Animation animation) {
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onAnimationEnd(Animation animation) {
+                                                                            ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onAnimationRepeat(Animation animation) {
+
+                                                                        }
+                                                                    });
+                                                                personpreview.startAnimation(slide_up1);
+
+
+
 
                                                             }
                                                         })
@@ -626,50 +937,58 @@ public class Hot_People_fragment extends Fragment {
                                                 alertDialog.show();
 
                                             } else {
-                                                int finalRadius = Math.max(view.getWidth(), view.getHeight());
 
-                                                // create the animator for this view (the start radius is zero)
-                                                Animator anim = ViewAnimationUtils.createCircularReveal(addedonSnap_personpreview, (int) motionEvent.getX(), (int) motionEvent.getY(),
-                                                        0, finalRadius);
-                                                anim.setDuration(1000);
-                                                anim.setInterpolator(new FastOutSlowInInterpolator());
+                                                SharedPreferences prefs = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+                                                int credits = (prefs.getInt("credits", 0));
 
 
-                                                // make the view visible and start the animation
-                                                addedonSnap_personpreview.setVisibility(View.VISIBLE);
-                                                anim.start();
+                                                    int finalRadius = Math.max(view.getWidth(), view.getHeight());
 
-                                                anim.addListener(new Animator.AnimatorListener() {
-                                                    @Override
-                                                    public void onAnimationStart(Animator animator) {
+                                                    // create the animator for this view (the start radius is zero)
+                                                    Animator anim = ViewAnimationUtils.createCircularReveal(addedonSnap_personpreview, (int) motionEvent.getX(), (int) motionEvent.getY(),
+                                                            0, finalRadius);
+                                                    anim.setDuration(1000);
+                                                    anim.setInterpolator(new FastOutSlowInInterpolator());
 
-                                                    }
 
-                                                    @Override
-                                                    public void onAnimationEnd(Animator animator) {
+                                                    // make the view visible and start the animation
+                                                    addedonSnap_personpreview.setVisibility(View.VISIBLE);
+                                                    anim.start();
 
-                                                        addonSnap_personpreview.setVisibility(View.GONE);
+                                                    anim.addListener(new Animator.AnimatorListener() {
+                                                        @Override
+                                                        public void onAnimationStart(Animator animator) {
 
-                                                        final AsyncTask_hotPeople get_user = new AsyncTask_hotPeople(context);
-                                                        get_user.execute("buy_id", id, sc_username);
-                                                    }
+                                                        }
 
-                                                    @Override
-                                                    public void onAnimationCancel(Animator animator) {
+                                                        @Override
+                                                        public void onAnimationEnd(Animator animator) {
 
-                                                    }
+                                                            addonSnap_personpreview.setVisibility(View.GONE);
 
-                                                    @Override
-                                                    public void onAnimationRepeat(Animator animator) {
+                                                            final AsyncTask_hotPeople get_user = new AsyncTask_hotPeople(context);
+                                                            get_user.execute("buy_id", id, sc_username, value);
+                                                        }
 
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onAnimationCancel(Animator animator) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onAnimationRepeat(Animator animator) {
+
+                                                        }
+                                                    });
+
 
                                             }
                                         }
                                         return false;
                                     }
+
                                 });
+
 
                                 final Boolean finalCanadd = canadd;
                                 addedonSnap_personpreview.setOnClickListener(new View.OnClickListener() {
@@ -677,10 +996,27 @@ public class Hot_People_fragment extends Fragment {
                                     public void onClick(View view) {
 
                                         if (finalCanadd) {
-                                            Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
-                                            context.startActivity(internetIntent);
 
-                                            Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
+
+
+                                            boolean isAppInstalled = PackageChecker.appInstalledOrNot("com.snapchat.android", getContext());
+
+                                            if(isAppInstalled) {
+
+                                                Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
+                                                context.startActivity(internetIntent);
+
+                                            } else {
+
+                                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat.com/add/"+sc_username));
+                                                startActivity(browserIntent);
+
+                                            }
+
+
+
+
+                                        Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
                                             View view2 = snack.getView();
                                             TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
                                             tv.setTextColor(Color.WHITE);
@@ -689,7 +1025,7 @@ public class Hot_People_fragment extends Fragment {
                                     }
                                 });
 
-                                like_btn_preson_preview.setOnTouchListener(new View.OnTouchListener() {
+                                like_btn_preson_preview_clicker.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -722,8 +1058,27 @@ public class Hot_People_fragment extends Fragment {
                                                                         .commit();
 
                                                                 if (personpreview != null)
-                                                                    personpreview.setVisibility(View.GONE);
-                                                                ((ViewManager) personpreview.getParent()).removeView(personpreview);
+
+                                                                    slide_up1.setAnimationListener(new Animation.AnimationListener() {
+                                                                        @Override
+                                                                        public void onAnimationStart(Animation animation) {
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onAnimationEnd(Animation animation) {
+                                                                            ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onAnimationRepeat(Animation animation) {
+
+                                                                        }
+                                                                    });
+                                                                personpreview.startAnimation(slide_up1);
+
+
 
 
                                                             }
@@ -787,13 +1142,31 @@ public class Hot_People_fragment extends Fragment {
                                     }
                                 });
 
-                                personpreview.setOnClickListener(new View.OnClickListener() {
+                                clicktodismiss_prevbg.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
 
                                         if (personpreview != null)
-                                            personpreview.setVisibility(View.GONE);
-                                        ((ViewManager) personpreview.getParent()).removeView(personpreview);
+
+                                            slide_up1.setAnimationListener(new Animation.AnimationListener() {
+                                                @Override
+                                                public void onAnimationStart(Animation animation) {
+
+                                                }
+
+                                                @Override
+                                                public void onAnimationEnd(Animation animation) {
+                                                    ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                                }
+
+                                                @Override
+                                                public void onAnimationRepeat(Animation animation) {
+
+                                                }
+                                            });
+                                        personpreview.startAnimation(slide_up1);
+
 
 
                                     }
@@ -801,9 +1174,27 @@ public class Hot_People_fragment extends Fragment {
                                 ((MainActivity) getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
                                     public void doBack() {
 
-                                        if (personpreview != null)
-                                            personpreview.setVisibility(View.GONE);
-                                        ((ViewManager) personpreview.getParent()).removeView(personpreview);
+                                        if (personpreview.getParent() != null &&personpreview!=null)
+
+                                            slide_up1.setAnimationListener(new Animation.AnimationListener() {
+                                                @Override
+                                                public void onAnimationStart(Animation animation) {
+
+                                                }
+
+                                                @Override
+                                                public void onAnimationEnd(Animation animation) {
+                                                    ((ViewGroup) personpreview.getParent()).removeView(personpreview);
+
+                                                }
+
+                                                @Override
+                                                public void onAnimationRepeat(Animation animation) {
+
+                                                }
+                                            });
+                                        personpreview.startAnimation(slide_up1);
+
 
                                     }
                                 });
@@ -836,6 +1227,8 @@ public class Hot_People_fragment extends Fragment {
                             contentlist2.addView(rl);
 //                        contentlist2.addView(v);
                             //                 contentlist3.addView(v);
+
+
 
 
                             final Handler ha = new Handler();
@@ -907,6 +1300,22 @@ public class Hot_People_fragment extends Fragment {
                                 break;
 
                         }
+                        Animation anim  = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_with_scale);
+                        anim.setDuration(500);
+                        v.startAnimation(anim);
+
+                        if (blockstring.contains(",")) {
+                            String[] separated = blockstring.split(",");
+
+                            for (int j = 0; j < separated.length; j++) {
+                                if (separated[j].equals(id)) {
+                                    ((ViewGroup) v.getParent()).removeView(v);
+                                    break;
+                                }
+                            }
+                        }
+
+
 
                     }
 
@@ -917,10 +1326,7 @@ public class Hot_People_fragment extends Fragment {
 
 
                 }
-
-                if (doafter.equals("")) {
-                    //todo
-                }
+                swipeRefreshLayout.setRefreshing(false);
 
 
             }

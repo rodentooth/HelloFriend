@@ -5,11 +5,14 @@
     android:layout_height="match_parent"
     tools:context="com.frozensparks.hellofriend.SignUp.SignUp">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
+        android:id="@+id/bgtorequestfocus_signup"
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <ScrollView
             android:id="@+id/scrollView_SignUp"
@@ -198,7 +201,7 @@
                             android:layout_alignTop="@+id/imageSignInnr3"
                             android:layout_marginLeft="60dp"
                             android:gravity="center_vertical"
-                            android:text="Upload Your Profile Photo"
+                            android:text="@string/upload_your_profile_photo"
                             android:textSize="18sp" />
                     </RelativeLayout>
 
@@ -231,9 +234,10 @@
                             android:adjustViewBounds="false"
                             android:background="@color/colorHeartRed"
                             android:elevation="20dp"
-                            android:scaleType="fitCenter"
-                            android:text="Create Account"
+                            android:text="@string/create_account"
                             android:textSize="20sp" />
+
+
                     </RelativeLayout>
 
                 </RelativeLayout>
@@ -266,14 +270,14 @@
                         android:tint="@color/colorHeartRed" />
 
                     <TextView
-                        android:id="@+id/login_to_google_textView"
+                        android:id="@+id/login_to_google_textView_signin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/imageSignInnr1"
                         android:layout_alignTop="@+id/imageSignInnr1"
                         android:layout_marginLeft="60dp"
                         android:gravity="center_vertical"
-                        android:text="Verify with your Google Profile"
+                        android:text="@string/verify_with_your_google_profile"
                         android:textSize="18sp" />
 
                     <RelativeLayout
@@ -318,8 +322,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/relativeLayout4"
                     android:background="#ffffff"
-                    android:elevation="3dp"
-                    android:visibility="invisible">
+                    android:elevation="3dp">
 
 
                     <EditText
@@ -352,7 +355,7 @@
                             android:layout_alignTop="@+id/imageSignInnr2"
                             android:layout_marginLeft="60dp"
                             android:gravity="center_vertical"
-                            android:text="Join The Family"
+                            android:text="@string/join_the_family"
                             android:textSize="18sp" />
                     </RelativeLayout>
 
@@ -369,7 +372,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:hint="SnapChat name" />
+                            android:hint="@string/snapchat_name" />
                     </android.support.design.widget.TextInputLayout>
 
                     <RadioGroup
@@ -424,7 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:contextClickable="true"
-                            android:hint="Birth year"
+                            android:hint="@string/birth_year"
                             android:inputType="number"
                             android:maxLength="4" />
                     </android.support.design.widget.TextInputLayout>
@@ -442,9 +445,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:hint="Country"
+                            android:hint="@string/country"
                             android:inputType="none" />
                     </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/genderdesc_signup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/text_input_layout_date"
+                        android:layout_alignTop="@+id/radioGroup1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@+id/radioGroup1"
+                        android:gravity="center_vertical" />
 
                 </RelativeLayout>
             </RelativeLayout>
@@ -457,7 +470,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:visibility="gone"
-            app:srcCompat="@mipmap/bg_ursugs" />
+            app:srcCompat="@mipmap/bg_suggestions_1" />
 
     </RelativeLayout>
 </FrameLayout>

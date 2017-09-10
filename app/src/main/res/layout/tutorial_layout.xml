@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.romainpiel.shimmer.ShimmerTextView
+        android:id="@+id/subtitle_tutorial"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/swipetocontinue"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_above="@+id/arrow_tutorial"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/title_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="118dp"
+        android:text="@string/welcome"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/arrow_tutorial"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:tag="1"
+        app:srcCompat="@drawable/ic_arrow_forward_black"
+        android:layout_above="@+id/add_btn_tutorial"
+        android:layout_centerHorizontal="true" />
+
+
+    <com.sackcentury.shinebuttonlib.ShineButton
+        android:id="@+id/add_btn_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="40dp"
+        app:big_shine_color="@color/colorAccent"
+        app:small_shine_color="#00bfa5"
+        android:elevation="2dp"
+        app:shine_distance_multiple="0.3"
+
+        />
+
+    <ImageButton
+        android:id="@+id/add_btn_tutorial_toremove"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="40dp"
+        android:background="@color/colorPrimary"
+        android:baselineAlignBottom="false"
+        android:scaleType="fitCenter"
+        android:tint="#ffffff"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_add_black" />
+
+    <ImageButton
+        android:id="@+id/added_btn_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="40dp"
+        android:background="@color/colorAccent"
+        android:baselineAlignBottom="false"
+        android:scaleType="fitCenter"
+        android:tint="#ffffff"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_check" />
+</RelativeLayout>

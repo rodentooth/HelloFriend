@@ -3,9 +3,12 @@ package com.frozensparks.hellofriend.SignUp;
 import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,6 +30,10 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +45,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -61,6 +69,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.CountryPickerListener;
 
@@ -85,6 +95,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Objects;
+
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -140,13 +151,14 @@ public class SignUp extends Fragment {
     int picnr;
     Bitmap bitmapResized;
     int serverResponseCode = 0;
-    ProgressDialog pd;
 
+    boolean run = true;
     ScrollView scrollView_SignUp;
     int animation=0;
     int animation_slides=0;
-
-
+    RelativeLayout bgtorequestfocus_signup;
+    ProgressDialog pd;
+    String finsttoken;
 
 
 
@@ -198,9 +210,25 @@ public class SignUp extends Fragment {
             }
         });
 
-        final RadioGroup radioGroup1 = view.findViewById(R.id.radioGroup1);
+
+        bgtorequestfocus_signup = view.findViewById(R.id.bgtorequestfocus_signup);
+        bgtorequestfocus_signup.requestFocus();
+
+        pd = new ProgressDialog(getContext());
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMax(100);
+        pd.setCancelable(false);
+        pd.create();
+
 
         country_input =  view.findViewById(R.id.country_input);
+        final RadioGroup radioGroup1 = view.findViewById(R.id.radioGroup1);
+
+        Country countryc = Country.getCountryFromSIM(getContext()); //Get user country based on SIM card
+        if(countryc!=null) {
+            country_input.setText(countryc.getName());
+            country = countryc.getName();
+        }
 
         final CountryPicker picker = CountryPicker.newInstance("Select Country");  // dialog title
         picker.setListener(new CountryPickerListener() {
@@ -211,6 +239,10 @@ public class SignUp extends Fragment {
                 //Toast.makeText(getContext(), code, Toast.LENGTH_SHORT).show();
                 country_input.setText(name);
                 picker.dismiss();
+
+                bgtorequestfocus_signup.requestFocus();
+
+
 
             }
         });
@@ -224,22 +256,66 @@ public class SignUp extends Fragment {
         });
 
         SignUpButton=view.findViewById(R.id.SignUpButton);
+
         SignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if(valid){
-                    AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
-                    lol.execute("new_user","");
 
-                    pd = new ProgressDialog(getContext());
-                    pd.setMessage((getString(R.string.creating_ur_acc)));
-                    pd.show();
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            getContext());
+
+                    final TextView message = new TextView(getActivity());
+                    // i.e.: R.string.dialog_message =>
+                    // "Test this dialog following the link to dtmilano.blogspot.com"
+                    final SpannableString s =
+                            new SpannableString(getString(R.string.byclickingyouaccept) +
+                                    "   " +"snapchat.frozensparks.com/Terms.html");
+                    Linkify.addLinks(s, Linkify.WEB_URLS);
+                    message.setText(s);
+                    message.setMovementMethod(LinkMovementMethod.getInstance());
+
+                    // set title
+                    alertDialogBuilder.setView(message);
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int i) {
+                                    AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
+                                    lol.execute("new_user","");
+
+                                    pd.show();
+
+
+
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
+
+
 
                 }
 
             }
         });
+
+        final TextView genderdesc_signup = view.findViewById(R.id.genderdesc_signup);
 
 
         picprod1 =  view.findViewById(R.id.picprod1);
@@ -336,6 +412,27 @@ public class SignUp extends Fragment {
         });
 
 
+        final Handler ha2=new Handler();
+        ha2.postDelayed(new Runnable() {
+
+
+            @Override
+            public void run() {
+
+                if(pd.isShowing())
+                    pd.incrementProgressBy(1);
+
+
+
+
+                ha2.postDelayed(this, 500);
+            }
+        }, 1000);
+
+
+
+
+
         mAuth = FirebaseAuth.getInstance();
 
          gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -357,9 +454,11 @@ public class SignUp extends Fragment {
         ha.postDelayed(new Runnable() {
 
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
 
+                if (run)
 
                  username = UserName_input.getText().toString();
                 age = Years_input.getText().toString();
@@ -367,6 +466,14 @@ public class SignUp extends Fragment {
                 RadioButton r = (RadioButton)  radioGroup1.getChildAt(idx);
                 if (r!=null) {
                      gender = String.valueOf(r.getTag());
+
+                    if(gender.equals("0"))
+                        genderdesc_signup.setText(R.string.male);
+                    if(gender.equals("1"))
+                        genderdesc_signup.setText(R.string.female);
+                    if(gender.equals("2"))
+                        genderdesc_signup.setText(R.string.bisexual);
+
                 }
 
 
@@ -436,32 +543,33 @@ public class SignUp extends Fragment {
 
                 }
                 if(imagePath1.equals("")) {
+                    if(valid) {
 
-                    int colorTo = getResources().getColor(R.color.colorHeartRed);
-                    int colorFrom = getResources().getColor(R.color.colorAccent);
-                    ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-                    colorAnimation.setDuration(250); // milliseconds
-                    colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        int colorTo = getResources().getColor(R.color.colorHeartRed);
+                        int colorFrom = getResources().getColor(R.color.colorAccent);
+                        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                        colorAnimation.setDuration(250); // milliseconds
+                        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animator) {
-                            imageSignInnr3.setColorFilter((int) animator.getAnimatedValue());
-                            SignUpButton.setBackgroundColor((int) animator.getAnimatedValue());
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animator) {
+                                imageSignInnr3.setColorFilter((int) animator.getAnimatedValue());
+                                SignUpButton.setBackgroundColor((int) animator.getAnimatedValue());
+
+                            }
+
+                        });
+                        if (animation == 2) {
+                            colorAnimation.start();
+                            animation = 1;
+
+
+                            scrollView_SignUp = view.findViewById(R.id.scrollView_SignUp);
+                            scrollView_SignUp.fullScroll(ScrollView.FOCUS_DOWN);
 
                         }
-
-                    });
-                    if(animation ==2) {
-                        colorAnimation.start();
-                        animation=1;
-
-
-                    scrollView_SignUp = view.findViewById(R.id.scrollView_SignUp);
-                    scrollView_SignUp.fullScroll(ScrollView.FOCUS_DOWN);
-
+                        valid = false;
                     }
-                    valid=false;
-
 
                 }
 
@@ -579,6 +687,10 @@ public class SignUp extends Fragment {
             gid = user.getUid();
             name= user.getDisplayName();
 
+            finsttoken = FirebaseInstanceId.getInstance().getToken();
+
+
+
             //Toast.makeText(getContext(), gid, Toast.LENGTH_SHORT).show();
 
 
@@ -597,13 +709,14 @@ signIn();
 
 
     public int uploadFile(String sourceFileUri, final int way) {
-        String nr = Integer.toString(way);
+        final String nr = Integer.toString(way);
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                pd.setMessage((getString(R.string.uploadingPicNr))+way);
+                pd.incrementProgressBy(25);
+                pd.setMessage((R.string.uploadingPicNr) + nr);
 
             }
         });
@@ -746,6 +859,7 @@ signIn();
 
 
                             if(way==1){
+                                imagePath1="";
 
                                 if(!imagePath2.equals("")) {
 
@@ -781,6 +895,7 @@ signIn();
 
                             }
                             if(way==2){
+                                imagePath2="";
 
                                 if(!imagePath3.equals("")) {
 
@@ -810,6 +925,7 @@ signIn();
                             }
 
                             if(way==3){
+                                imagePath3="";
 
 
                                 if(!imagePath4.equals("")){
@@ -822,8 +938,13 @@ signIn();
 
                                 }
                                 else{
-                                    finishit();
                                 }
+
+                            }
+                            if(way==4){
+                                imagePath4="";
+
+                                finishit();
 
                             }
 
@@ -857,10 +978,46 @@ signIn();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
 
-                        Toast.makeText(getContext(), "Got Exception : see logcat ",
-                                Toast.LENGTH_SHORT).show();
+
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                getContext());
+
+                        // set title
+                        alertDialogBuilder.setTitle(R.string.thatsuptous);
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage(R.string.wewilluploadwheninternentiaavailable)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        finishit();
+                                    }
+                                });
+
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+
+                        pd.dismiss();
+
                     }
                 });
+
+
+
+                SharedPreferences.Editor filter = getActivity().getSharedPreferences("imageUpload", MODE_PRIVATE).edit();
+                filter.putString("image1", imagePath1);
+                filter.putString("image2", imagePath2);
+                filter.putString("image3", imagePath3);
+                filter.putString("image4", imagePath4);
+                filter.apply();
+
                 Log.e("Upload Error:", "Exception : "
                         + e.getMessage(), e);
             }
@@ -915,9 +1072,11 @@ signIn();
     }
 
     public void finishit(){
-        if(pd!=null) {
+
+        if(pd!=null){
             pd.dismiss();
         }
+
         Snackbar snack = Snackbar.make(getView(), R.string.youcannowaddpeople, Snackbar.LENGTH_LONG);
         View view2 = snack.getView();
         TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
@@ -937,7 +1096,7 @@ signIn();
 
         Your_Suggestions nextFrag= new Your_Suggestions();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_main, nextFrag,"")
+                .replace(R.id.content_main, nextFrag,"Your_Suggestions")
                 .addToBackStack(null)
                 .commit();
 
@@ -955,6 +1114,22 @@ signIn();
         mGoogleApiClient.stopAutoManage(getActivity());
         mGoogleApiClient.disconnect();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        run=false;
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        run=true;
+
+    }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
@@ -984,40 +1159,47 @@ signIn();
                 });
     }
 
-    private void showDatePicker() {
-        DatePickerFragment date = new DatePickerFragment();
-        Calendar calender = Calendar.getInstance();
-        Bundle args = new Bundle();
-        args.putInt("year", calender.get(Calendar.YEAR));
-        args.putInt("month", calender.get(Calendar.MONTH));
-        args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
-        date.setArguments(args);
-        date.setCallBack(ondate);
-        date.show(getFragmentManager(), "Date Picker");
+        private void showDatePicker() {
+
+
+
+        final Dialog d = new Dialog(getContext());
+        d.setCancelable(false);
+        d.setContentView(R.layout.np_dialog);
+        Button b1 = (Button) d.findViewById(R.id.ok_npdialog);
+        final NumberPicker np = (NumberPicker) d.findViewById(R.id.np_npdialog);
+        np.setMaxValue((Calendar.getInstance().get(Calendar.YEAR)));
+        np.setMinValue((Calendar.getInstance().get(Calendar.YEAR)-99));
+        np.setValue((Calendar.getInstance().get(Calendar.YEAR))-15);
+        //np.setWrapSelectorWheel(false);
+
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ((Calendar.getInstance().get(Calendar.YEAR)-np.getValue())<13){
+                    text_input_layout_date.setError(getString(R.string.youmustbeatleast13));
+                    Years_input.clearFocus();
+
+                }
+                else{
+                    Years_input.setText(String.valueOf(np.getValue()));
+                    text_input_layout_date.setError(null);
+                    // text_input_layout_date.setErrorTextAppearance();
+
+                }
+
+                d.dismiss();
+                bgtorequestfocus_signup.requestFocus();
+
+            }
+        });
+
+
+        d.show();
+
+
     }
-
-    DatePickerDialog.OnDateSetListener ondate = new DatePickerDialog.OnDateSetListener() {
-
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-
-
-            if ((Calendar.getInstance().get(Calendar.YEAR)-year)<13){
-                text_input_layout_date.setError("You must be at least 13 years old");
-                Years_input.clearFocus();
-
-            }
-            else{
-                Years_input.setText(String.valueOf(year));
-                text_input_layout_date.setError(null);
-               // text_input_layout_date.setErrorTextAppearance();
-
-            }
-
-
-
-        }
-    };
 
 
 
@@ -1053,7 +1235,8 @@ signIn();
                     httpurlconn.setDoInput(true);
                     OutputStream outputStream = httpurlconn.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                    String post_data = URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode(gid, "UTF-8");
+                    String post_data = URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode(gid, "UTF-8") + "&" +
+                            URLEncoder.encode("instance_token", "UTF-8") + "=" + URLEncoder.encode((finsttoken), "UTF-8");
                     bufferedWriter.write(post_data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -1080,9 +1263,175 @@ signIn();
 
 
             }
+            if (type.equals("get_added")) {
+                try {
+                    String URL = "http://snapchat.frozensparks.com/user/" + user_id + "/added.txt";
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("gender", "UTF-8") + "=" + URLEncoder.encode(gender, "UTF-8") + "&" +
+                            URLEncoder.encode("age", "UTF-8") + "=" + URLEncoder.encode((age), "UTF-8") + "&" +
+                            URLEncoder.encode("country", "UTF-8") + "=" + URLEncoder.encode((country), "UTF-8") + "&" +
+                            URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode((gid), "UTF-8") + "&" +
+                            URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode((email), "UTF-8") + "&" +
+                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
 
 
-            if (type.equals("new_user")) {
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (type.equals("get_unlocked_likers")) {
+                try {
+                    String URL = "http://snapchat.frozensparks.com/user/" + user_id + "/unlocked_likers.txt";
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("gender", "UTF-8") + "=" + URLEncoder.encode(gender, "UTF-8") + "&" +
+                            URLEncoder.encode("age", "UTF-8") + "=" + URLEncoder.encode((age), "UTF-8") + "&" +
+                            URLEncoder.encode("country", "UTF-8") + "=" + URLEncoder.encode((country), "UTF-8") + "&" +
+                            URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode((gid), "UTF-8") + "&" +
+                            URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode((email), "UTF-8") + "&" +
+                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (type.equals("get_liked")) {
+                try {
+                    String URL = "http://snapchat.frozensparks.com/user/" + user_id + "/liked.txt";
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("gender", "UTF-8") + "=" + URLEncoder.encode(gender, "UTF-8") + "&" +
+                            URLEncoder.encode("age", "UTF-8") + "=" + URLEncoder.encode((age), "UTF-8") + "&" +
+                            URLEncoder.encode("country", "UTF-8") + "=" + URLEncoder.encode((country), "UTF-8") + "&" +
+                            URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode((gid), "UTF-8") + "&" +
+                            URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode((email), "UTF-8") + "&" +
+                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (type.equals("get_blocked")) {
+                try {
+                    String URL = "http://snapchat.frozensparks.com/user/" + user_id + "/blocked.txt";
+
+                    java.net.URL url = new URL(URL);
+                    HttpURLConnection httpurlconn = (HttpURLConnection) url.openConnection();
+                    httpurlconn.setRequestMethod("POST");
+                    httpurlconn.setDoOutput(true);
+                    httpurlconn.setDoInput(true);
+                    OutputStream outputStream = httpurlconn.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    String post_data = URLEncoder.encode("gender", "UTF-8") + "=" + URLEncoder.encode(gender, "UTF-8") + "&" +
+                            URLEncoder.encode("age", "UTF-8") + "=" + URLEncoder.encode((age), "UTF-8") + "&" +
+                            URLEncoder.encode("country", "UTF-8") + "=" + URLEncoder.encode((country), "UTF-8") + "&" +
+                            URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode((gid), "UTF-8") + "&" +
+                            URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode((email), "UTF-8") + "&" +
+                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8");
+                    bufferedWriter.write(post_data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    outputStream.close();
+
+                    InputStream inputStream = httpurlconn.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String result = "";
+                    String line;
+
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
+                    httpurlconn.disconnect();
+
+                    return result;
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+                    if (type.equals("new_user")) {
                 try {
                     String URL = "http://snapchat.frozensparks.com/new_user.php";
 
@@ -1098,7 +1447,8 @@ signIn();
                             URLEncoder.encode("country", "UTF-8") + "=" + URLEncoder.encode((country), "UTF-8") +"&"+
                             URLEncoder.encode("gid", "UTF-8") + "=" + URLEncoder.encode((gid), "UTF-8") +"&"+
                             URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode((email), "UTF-8") +"&"+
-                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8");
+                            URLEncoder.encode("user_name", "UTF-8") + "=" + URLEncoder.encode((username), "UTF-8") + "&" +
+                            URLEncoder.encode("instance_token", "UTF-8") + "=" + URLEncoder.encode((finsttoken), "UTF-8");
                     bufferedWriter.write(post_data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -1159,6 +1509,7 @@ signIn();
                     e.printStackTrace();
                 }
 
+                int trigger=0;
 
                 JSONArray toplevels = null;
                 try {
@@ -1166,16 +1517,23 @@ signIn();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                int totalrows = 0;
+                try {
+                    if(jsonObj.getString("AMOUNT").equals(""))
+                    trigger = 0;
+                    else
+                        trigger=1;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
-                // Save state
-                   /* Parcelable recyclerViewState;
-                    recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-
-                    adapter = new RecycleViewAdapter_your_suggestions(Your_Suggestions.context, feedsList);
-                    mRecyclerView.setAdapter(adapter);
-*/
-
+                String id="";
+                String gender="";
+                String sc_username="";
+                String year="";
+                String credits="";
+                String Country="";
 
                 // looping through All Contacts
                 for (int i = 0; i < toplevels.length(); i++) {
@@ -1183,26 +1541,27 @@ signIn();
                     try {
                         c = toplevels.getJSONObject(i);
 
-                        String id;
-                        String gender;
-                        String sc_username;
-                        String year;
-                        String value;
-                        String Country;
-                        int trigger=0;
+
+
 
 
                         id = c.getString("id");
                         gender = c.getString("gender");
                         sc_username = c.getString("sc_username");
                      year = c.getString("year");
-                     value = c.getString("value");
+                     credits = c.getString("credits");
                      Country = c.getString("country");
-                    trigger = Integer.valueOf(c.getString("trigger"));
 
 
-                if(trigger==1) {
-                    Snackbar snack = Snackbar.make(getView(), getString(R.string.welcomeback)+ name+ "!", Snackbar.LENGTH_LONG);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
+                if(!id.equals("")) {
+                    Snackbar snack = Snackbar.make(getView(), getString(R.string.welcomeback)+ " " +name+ "!", Snackbar.LENGTH_LONG);
                     View view2 = snack.getView();
                     TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
                     tv.setTextColor(Color.WHITE);
@@ -1210,23 +1569,21 @@ signIn();
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences("user", MODE_PRIVATE).edit();
                     editor.putString("gender", gender);
                     editor.putInt("userid", Integer.valueOf(id));
-                    editor.putInt("credits", 500);
+                    editor.putInt("credits", Integer.valueOf(credits));
                     editor.putString("age", year);
                     editor.putString("gid", gid);
                     editor.putString("country", Country);
                     editor.putString("sc_username",sc_username);
                     editor.apply();
 
+                    user_id = Integer.valueOf(id);
 
-                    Your_Suggestions nextFrag= new Your_Suggestions();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content_main, nextFrag,"")
-                            .addToBackStack(null)
-                            .commit();
+                    AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
+                    lol.execute("get_added","");
+
+
                 }
-
-
-                if(trigger==0) {
+                else{
 
                     int colorFrom = getResources().getColor(R.color.colorHeartRed);
                     int colorTo = getResources().getColor(R.color.colorAccent);
@@ -1258,14 +1615,58 @@ signIn();
 
 
                 }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+
+            }
+            if (type.equals("get_liked")) {
+
+                SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                editor.putString("like",result);
+                editor.apply();
+
+                Your_Suggestions nextFrag= new Your_Suggestions();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_main, nextFrag,"")
+                        .addToBackStack(null)
+                        .commit();
+
+
+            }
+            if (type.equals("get_added")) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                editor.putString("added",result);
+                editor.apply();
+
+
+                AsyncTask_SignIn lol2 = new AsyncTask_SignIn(getContext());
+                lol2.execute("get_blocked","");
+
+
+            }
+            if (type.equals("get_blocked")) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                editor.putString("flag",result);
+                editor.apply();
+
+
+                AsyncTask_SignIn lol2 = new AsyncTask_SignIn(getContext());
+                lol2.execute("get_unlocked_likers","");
+
+
+            }
+            if (type.equals("get_unlocked_likers")) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("user_storage", MODE_PRIVATE).edit();
+                editor.putString("unlocked_likers",result);
+                editor.apply();
+
+
+                AsyncTask_SignIn lol2 = new AsyncTask_SignIn(getContext());
+                lol2.execute("get_liked","");
+
 
             }
 
-            if (type.equals("new_user")) {
+
+                if (type.equals("new_user")) {
 
 
                 try {
@@ -1281,6 +1682,7 @@ signIn();
                         public void run() {
                             uploadFile(imagePath1, 1);
 
+                            pd.incrementProgressBy(20);
 
 
                         }

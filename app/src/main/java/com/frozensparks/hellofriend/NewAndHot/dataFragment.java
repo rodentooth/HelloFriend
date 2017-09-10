@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.frozensparks.hellofriend.R;
 
+
 /**
  * Created by Mako on 1/13/2017.
  */
@@ -25,11 +26,6 @@ public class dataFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.containter_new_and_hot, container, false);
-
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-        AppBarLayout.LayoutParams params =
-                (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
 
 
 
@@ -54,10 +50,6 @@ public class dataFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
-            AppBarLayout.LayoutParams params =
-                    (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
 
 
             switch (position) {
