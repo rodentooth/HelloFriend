@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -47,6 +48,7 @@ import com.frozensparks.hellofriend.R;
 import com.frozensparks.hellofriend.Tools.PackageChecker;
 import com.frozensparks.hellofriend.Tools.SwipeBackLayout;
 import com.frozensparks.hellofriend.likesAndDiamonds.DiamondFragment;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.ActionCodeResult;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -86,7 +88,6 @@ public class New_People_fragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     int seconds;
 
-    private SwipeBackLayout swipeBackLayout;
 
     @Nullable
     @Override
@@ -96,6 +97,7 @@ public class New_People_fragment extends Fragment {
         view = inflater.inflate(R.layout.content, container, false);
 
 
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         empty_state = view.findViewById(R.id.empty_state_content);
         empty_state.setVisibility(View.VISIBLE);
@@ -406,8 +408,20 @@ public class New_People_fragment extends Fragment {
                         editor1.apply();
 
 
-                        Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
-                        context.startActivity(internetIntent);
+
+                        boolean isAppInstalled = PackageChecker.appInstalledOrNot("com.snapchat.android", getContext());
+
+                        if(isAppInstalled) {
+
+                            Intent internetIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat://add/" + sc_username));
+                            context.startActivity(internetIntent);
+
+                        } else {
+
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("snapchat.com/add/"+sc_username));
+                            startActivity(browserIntent);
+
+                        }
 
 
                         Snackbar snack = Snackbar.make(view, R.string.copied_scname, Snackbar.LENGTH_LONG);
@@ -419,6 +433,11 @@ public class New_People_fragment extends Fragment {
                         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("label", sc_username);
                         clipboard.setPrimaryClip(clip);
+
+
+                        Toast.makeText(context, "hallo", Toast.LENGTH_SHORT).show();
+
+
 
 
                         SharedPreferences prefs2 = context.getSharedPreferences(

@@ -4,7 +4,7 @@
     <string name="accept">Akzeptieren!</string>
     <string name="action_settings">Einstellungen</string>
     <string name="addsomeone">Jemanden adden:</string>
-    <string name="byclickingyouaccept">Bitte akzeptiere die AGBs</string>
+    <string name="byclickingyouaccept">Mit der Accounterstellung akteptierst du<u> unsere AGB</u></string>
     <string name="cangingyourfiletrmessage">Vielleicht hilft es, den Filter anzupassen!</string>
     <string name="clear">reset</string>
     <string name="click">Klick!</string>

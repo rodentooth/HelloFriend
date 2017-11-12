@@ -47,7 +47,7 @@
     <string name="userreported">User reported</string>
     <string name="goodbye">Goodbye! Sad to see you go.</string>
     <string name="isthisyourfinalchoice">Is this your final choice? :/</string>
-    <string name="byclickingyouaccept">Please accept our terms of service:</string>
+    <string name="byclickingyouaccept">With the creation of your account you accept<u> our terms of service</u></string>
     <string name="accept">Accept!</string>
     <string name="addsomeone">How to add someone:</string>
     <string name="click">Click!</string>

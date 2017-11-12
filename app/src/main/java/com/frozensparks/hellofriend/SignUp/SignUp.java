@@ -54,6 +54,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.frozensparks.hellofriend.R;
 import com.frozensparks.hellofriend.your_suggestions.Your_Suggestions;
 import com.google.android.gms.auth.api.Auth;
@@ -64,12 +66,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.ironsource.mediationsdk.utils.IronSourceConstants;
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.CountryPickerListener;
@@ -152,6 +157,9 @@ public class SignUp extends Fragment {
     Bitmap bitmapResized;
     int serverResponseCode = 0;
 
+    AppEventsLogger logger = AppEventsLogger.newLogger(getContext());;
+
+
     boolean run = true;
     ScrollView scrollView_SignUp;
     int animation=0;
@@ -159,6 +167,7 @@ public class SignUp extends Fragment {
     RelativeLayout bgtorequestfocus_signup;
     ProgressDialog pd;
     String finsttoken;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
 
@@ -181,6 +190,8 @@ public class SignUp extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
         signInImageBtn = view.findViewById(R.id.signInImageBtn);
         signInImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,6 +206,24 @@ public class SignUp extends Fragment {
         relativeLayout6.setVisibility(View.INVISIBLE);
         relativeLayout7 = view.findViewById(R.id.relativeLayout7);
         relativeLayout7.setVisibility(View.INVISIBLE);
+
+        TextView textView7 = view.findViewById(R.id.textView7);
+        textView7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://snapchat.frozensparks.com/Terms.html"));
+                startActivity(browserIntent);
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.LOCATION, country);
+                mFirebaseAnalytics.logEvent("signup_Terms_opened", bundle);
+
+                logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION);
+
+
+            }
+        });
 
         UserName_input = view.findViewById(R.id.UserName_input);
         Years_input =  view.findViewById(R.id.Years_input);
@@ -263,51 +292,16 @@ public class SignUp extends Fragment {
 
                 if(valid){
 
+                    AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
+                    lol.execute("new_user","");
 
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            getContext());
+                    pd.show();
 
-                    final TextView message = new TextView(getActivity());
-                    // i.e.: R.string.dialog_message =>
-                    // "Test this dialog following the link to dtmilano.blogspot.com"
-                    final SpannableString s =
-                            new SpannableString(getString(R.string.byclickingyouaccept) +
-                                    "   " +"snapchat.frozensparks.com/Terms.html");
-                    Linkify.addLinks(s, Linkify.WEB_URLS);
-                    message.setText(s);
-                    message.setMovementMethod(LinkMovementMethod.getInstance());
-
-                    // set title
-                    alertDialogBuilder.setView(message);
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int i) {
-                                    AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
-                                    lol.execute("new_user","");
-
-                                    pd.show();
-
-
-
-                                }
-                            })
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // if this button is clicked, just close
-                                    // the dialog box and do nothing
-                                    dialog.cancel();
-                                }
-                            });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
-
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.LOCATION, country);
+                    bundle.putString("GENDER", gender);
+                    bundle.putString("AGE", age);
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
 
                 }
@@ -421,6 +415,8 @@ public class SignUp extends Fragment {
 
                 if(pd.isShowing())
                     pd.incrementProgressBy(1);
+                if(pd.getProgress()==100)
+                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 
 
@@ -1020,6 +1016,9 @@ signIn();
 
                 Log.e("Upload Error:", "Exception : "
                         + e.getMessage(), e);
+
+                FirebaseCrash.log("Upload Error:"+"Exception : "
+                        + e.getMessage());
             }
 
             return serverResponseCode;
@@ -1561,6 +1560,8 @@ signIn();
 
 
                 if(!id.equals("")) {
+
+
                     Snackbar snack = Snackbar.make(getView(), getString(R.string.welcomeback)+ " " +name+ "!", Snackbar.LENGTH_LONG);
                     View view2 = snack.getView();
                     TextView tv = (TextView) view2.findViewById(android.support.design.R.id.snackbar_text);
@@ -1580,6 +1581,8 @@ signIn();
 
                     AsyncTask_SignIn lol = new AsyncTask_SignIn(getContext());
                     lol.execute("get_added","");
+
+                    logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION);
 
 
                 }

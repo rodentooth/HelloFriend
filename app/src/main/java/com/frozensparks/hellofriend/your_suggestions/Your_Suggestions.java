@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.frozensparks.hellofriend.NewAndHot.New_People_fragment;
 import com.frozensparks.hellofriend.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import org.json.JSONArray;
@@ -75,6 +76,7 @@ public class Your_Suggestions extends Fragment {
 
     Boolean play=true;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
 
@@ -211,10 +213,12 @@ public class Your_Suggestions extends Fragment {
                 }
                 mAdapter.notifyDataSetChanged();
 
-
                 ha.postDelayed(this, 1);
             }
-        }, 100);
+        }, 0);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
 
         return view;
 

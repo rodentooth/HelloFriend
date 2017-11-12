@@ -64,6 +64,7 @@ import com.frozensparks.hellofriend.Tutorial.MainFragmentTutorial;
 import com.frozensparks.hellofriend.likesAndDiamonds.DiamondFragment;
 import com.frozensparks.hellofriend.likesAndDiamonds.likes_fragment;
 import com.frozensparks.hellofriend.your_suggestions.Your_Suggestions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.CountryPickerListener;
 
@@ -97,6 +98,8 @@ public class MainActivity extends AppCompatActivity
     EditText country_input;
     Dialog dialog;
     Boolean active = true;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
 
     @Override
@@ -129,7 +132,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(!filter.getString("image4", "").equals("")){
                     uploadFile(filter.getString("image4", ""),4);
-
                 }
 
 
@@ -158,8 +160,10 @@ public class MainActivity extends AppCompatActivity
     }
 }, 1);
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         //devices with hardware menu button (e.g. Samsung Note) don't show action overflow menu

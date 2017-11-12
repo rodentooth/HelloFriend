@@ -45,6 +45,7 @@ import com.frozensparks.hellofriend.Tools.OnBackPressedListener;
 import com.frozensparks.hellofriend.R;
 import com.frozensparks.hellofriend.Tools.PackageChecker;
 import com.frozensparks.hellofriend.Tools.SwipeBackLayout;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import org.json.JSONArray;
@@ -640,6 +641,9 @@ public class likes_fragment extends Fragment {
                     adapter = new RecycleViewAdapter_your_suggestions(Your_Suggestions.context, feedsList);
                     mRecyclerView.setAdapter(adapter);
 */
+
+                    FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
 
                     SharedPreferences prefs2 = context.getSharedPreferences(
                             "user_storage", Context.MODE_PRIVATE);

@@ -63,6 +63,7 @@ import com.frozensparks.hellofriend.Tools.SwipeBackLayout;
 import com.frozensparks.hellofriend.Tools.util.IabHelper;
 import com.frozensparks.hellofriend.Tools.util.IabResult;
 import com.frozensparks.hellofriend.Tools.util.Inventory;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.integration.IntegrationHelper;
 import com.ironsource.mediationsdk.logger.IronSourceError;
@@ -182,6 +183,7 @@ public class DiamondFragment extends Fragment {
         LinearLayout paid_dias_layout = view.findViewById(R.id.paid_dias_layout);
         paid_dias_layout.startAnimation(slide_up4);
 
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         swipeRefreshLayout.post(new Runnable() {
             @Override

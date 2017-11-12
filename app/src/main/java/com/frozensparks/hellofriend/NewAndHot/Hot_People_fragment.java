@@ -47,6 +47,7 @@ import com.frozensparks.hellofriend.R;
 import com.frozensparks.hellofriend.Tools.PackageChecker;
 import com.frozensparks.hellofriend.Tools.SwipeBackLayout;
 import com.frozensparks.hellofriend.likesAndDiamonds.DiamondFragment;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.ActionCodeResult;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -95,6 +96,7 @@ public class Hot_People_fragment extends Fragment {
 
         view = inflater.inflate(R.layout.content, container, false);
 
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         empty_state = view.findViewById(R.id.empty_state_content);
         empty_state.setVisibility(View.VISIBLE);
